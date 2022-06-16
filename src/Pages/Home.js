@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  Grid,
-  Icon,
-  IconButton,
-  Paper,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Grid, Icon, Paper, Stack, Typography } from "@mui/material";
 import { FcTodoList } from "react-icons/fc";
 import { MdWorkOutline } from "react-icons/md";
 import { BsEarbuds } from "react-icons/bs";
@@ -16,12 +9,14 @@ import { IoHomeOutline } from "react-icons/io5";
 import { BiMenuAltLeft } from "react-icons/bi";
 import { RiTodoLine } from "react-icons/ri";
 import { Container } from "@mui/system";
+import TodoViewer from "./TodoViewer";
+import { colors } from "../COLORS";
 
 const TodoCard = ({ data }) => {
   return (
     <Paper variant="outlined">
       <Stack p={1}>
-        <Icon sx={{ py: 1, color: "green" }}>{data.icon}</Icon>
+        <Icon sx={{ py: 1, color: colors.primary }}>{data.icon}</Icon>
         <Typography color="#A1A1A1" gutterBottom>
           {data.title}
         </Typography>
@@ -36,9 +31,6 @@ const TodoCard = ({ data }) => {
 const Header = () => {
   return (
     <Stack my={2} spacing={1}>
-      <Icon>
-        <BiMenuAltLeft size={25} />
-      </Icon>
       <Typography variant="h5" color="gray">
         Todos
       </Typography>
@@ -80,6 +72,12 @@ const Home = () => {
     },
   ]);
 
+  const [selectedItem, setselectedItem] = useState({
+    title: "All",
+    number: 32,
+    icon: <RiTodoLine />,
+  });
+
   return (
     <Container>
       <Header />
@@ -91,6 +89,7 @@ const Home = () => {
         ))}
       </Grid>
     </Container>
+    // <TodoViewer data={selectedItem} />
   );
 };
 
