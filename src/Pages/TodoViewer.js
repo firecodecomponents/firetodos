@@ -1,49 +1,138 @@
-import { Paper, Stack, Typography } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Avatar,
+  AvatarGroup,
+  Button,
+  Divider,
+  Icon,
+  MenuItem,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import { StaticDatePicker } from "@mui/x-date-pickers";
 import React, { useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
-import { MdArrowBack } from "react-icons/md";
+import {
+  MdAlarm,
+  MdArrowBack,
+  MdArrowDropDown,
+  MdStar,
+  MdStarOutline,
+} from "react-icons/md";
 import { RiTodoLine } from "react-icons/ri";
+import { AiOutlineSwap } from "react-icons/ai";
+import { colors } from "../COLORS";
+import { FaPlus } from "react-icons/fa";
 
-const TodoSummary = ({ color, date, title }) => {
+const Todo = ({ element }) => {
   return (
-    <Paper variant="outlined" sx={{ borderRadius: 3 }}>
-      <Stack direction="row" alignItems="center" py={1} px={2} color="black">
-        <Box
-          p={2}
-          border={2}
-          mr={1}
-          borderRadius={20}
-          borderColor="#9acbc9"
-          bgcolor="#c6e9e6"
-        ></Box>
-        <Typography flexGrow={1}>{title}</Typography>
-        <Typography>{date}</Typography>
-      </Stack>
-    </Paper>
-  );
-};
-
-const Body = () => {
-  return (
-    <Stack>
-      <Typography variant="h5">Today, 13 June</Typography>
-      <Stack my={2} spacing={2}>
-        <TodoSummary title="Project Settings" date="10:00" />
-        <TodoSummary title="Organize photo shoot" date="12:00" />
-        <TodoSummary title="Surveys users " date="13:20" />
-      </Stack>
-    </Stack>
+    <Accordion variant="outlined">
+      <AccordionSummary color="white">
+        <Box flex={1}>
+          <Stack
+            my={1}
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Typography variant="h5">{element.title}</Typography>
+            <BsThreeDots size={20} />
+          </Stack>
+          <Button endIcon={<AiOutlineSwap />} size="small">
+            {element.date.toLocaleDateString()}
+          </Button>
+          <Stack
+            direction="row"
+            mt={1}
+            spacing={1}
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Stack direction="row" mt={1} spacing={2} alignItems="center">
+              <Icon>
+                <MdStarOutline />
+              </Icon>
+              <Stack direction="row" spacing={1} alignItems="center">
+                <Icon>
+                  <MdAlarm />
+                </Icon>
+                <Typography>{element.remembers}</Typography>
+              </Stack>
+            </Stack>
+            <AvatarGroup>
+              {element.guests.map((guest, index) => (
+                <Avatar sx={{ width: 25, height: 25 }} key={index}></Avatar>
+              ))}
+            </AvatarGroup>
+          </Stack>
+        </Box>
+      </AccordionSummary>
+      <AccordionDetails sx={{ px: 0 }}>
+        <Divider />
+        <Stack spacing={1} divider={<Divider />} py={1}>
+          {element.guests.map((guest, index) => (
+            <Stack
+              direction="row"
+              alignItems="center"
+              spacing={2}
+              px={2}
+              key={index}
+              // py={1}
+            >
+              <Box
+                p={1.5}
+                border={2}
+                borderRadius={10}
+                borderColor={colors.primary}
+                bgcolor="#6274ad59"
+              ></Box>
+              <Typography flexGrow={1} variant="body1">
+                {guest.task}
+              </Typography>
+              <Avatar sx={{ width: 25, height: 25 }}></Avatar>
+            </Stack>
+          ))}
+        </Stack>
+        <Divider />
+        <MenuItem sx={{ py: 2, height: 20 }}>
+          <Stack direction="row" spacing={2}>
+            <Icon sx={{ ml: 0.2 }}>
+              <FaPlus color={colors.primary} />
+            </Icon>
+            <Typography>Add Sub task</Typography>
+          </Stack>
+        </MenuItem>
+      </AccordionDetails>
+    </Accordion>
   );
 };
 
 const TodoViewer = () => {
-  const [data, setdata] = useState({
-    title: "All",
-    number: 32,
-    icon: <RiTodoLine />,
-  });
+  const [data, setdata] = useState([
+    {
+      title: "Todo home page",
+      date: new Date(),
+      remembers: 1,
+      guests: [
+        { name: "Jhon", lastName: "Doe", task: "Landing page desing" },
+        { name: "Jane", lastName: "Doe", task: "Code landing page " },
+      ],
+    },
+    {
+      title: "Landing Page Design",
+      date: new Date(),
+      remembers: 2,
+      guests: [
+        { name: "Jhon", lastName: "Doe", task: "Add Photos" },
+        { name: "Jhon", lastName: "Doe", task: "Landing page desing" },
+        { name: "Jane", lastName: "Doe", task: "Code landing page " },
+      ],
+    },
+  ]);
   const Header = () => {
     return (
       <Stack m={2}>
@@ -61,19 +150,10 @@ const TodoViewer = () => {
   };
 
   return (
-    <Stack minHeight="100vh">
-      <Box bgcolor="#3A5C9A" flex={1} color="white">
-        <Header />
-      </Box>
-      <Box
-        flex={3}
-        bgcolor="white"
-        sx={{ borderTopLeftRadius: 20, borderTopRightRadius: 20 }}
-        mt={-2}
-        p={4}
-      >
-        <Body />
-      </Box>
+    <Stack minHeight="100vh" p={2} bgcolor="#F2F2F2" spacing={2}>
+      {data.map((todo, index) => (
+        <Todo element={todo} key={index} />
+      ))}
     </Stack>
   );
 };
